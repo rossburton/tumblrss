@@ -15,17 +15,25 @@
 # this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
 # St, Fifth Floor, Boston, MA 02110-1301 USA
 
-import datetime, os, re, urllib, urllib2, cookielib
+import ConfigParser, datetime, os, sys, re, urllib, urllib2, cookielib
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 from PyRSS2Gen import RSS2, RSSItem
+
+config = ConfigParser.ConfigParser()
+config.read(os.path.expanduser("~/.config/tumblrss"))
+
+if not config.has_section("Auth"):
+    print "Invalid configuration file"
+    sys.exit(1)
+
+auth = {
+    "email": config.get("Auth", "email"),
+    "password": config.get("Auth", "password")
+    }
 
 cj = cookielib.CookieJar()
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 
-auth = {
-    "email": "XXX",
-    "password": "XXX"
-    }
 opener.open("http://www.tumblr.com/login", urllib.urlencode(auth))
 page = opener.open("http://www.tumblr.com/dashboard").read()
 soup = BeautifulSoup(page, parseOnlyThese=SoupStrainer('li'))
