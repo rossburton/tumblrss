@@ -23,7 +23,7 @@ config = ConfigParser.ConfigParser()
 config.read(os.path.expanduser("~/.config/tumblrss"))
 
 if not config.has_section("Auth"):
-    print "Invalid configuration file"
+    print "Invalid configuration file, see the documentation"
     sys.exit(1)
 
 auth = {
