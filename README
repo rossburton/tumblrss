@@ -1,0 +1,24 @@
+Tumblrss
+========
+
+Copyright (C) 2009 Ross Burton <ross@linux.intel.com>
+
+A screen-scraper to generate a RSS feed from your Tumblr friends.
+
+
+Requirements
+===
+
+- Python
+- BeautifulSoup
+- PyRSS2Gen
+
+
+Configuration
+===
+
+Create ~/.config/tumblrss, with the following content:
+
+[Auth]
+email=<YOUR EMAIL ADDRESS>
+password=<YOUR PASSWORD>
