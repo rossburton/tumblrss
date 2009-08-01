@@ -91,4 +91,4 @@ if __name__ == "__main__":
         html = opener.open("http://www.tumblr.com/dashboard").read()
 
     rss = tumblrss(html)
-    rss.write_xml(open("tumblr.xml", "w"))
+    rss.write_xml(open("tumblr.xml", "w"), encoding="UTF-8")
