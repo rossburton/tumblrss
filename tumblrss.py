@@ -34,19 +34,9 @@ def load_config():
         "password": config.get("Auth", "password")
         }
 
-if __name__ == "__main__":
-    auth = load_config()
-    if auth is None:
-        print "Invalid configuration file, see the documentation"
-        sys.exit(1)
-    
-    cj = cookielib.CookieJar()
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-    
-    opener.open("http://www.tumblr.com/login", urllib.urlencode(auth))
-    page = opener.open("http://www.tumblr.com/dashboard").read()
-    soup = BeautifulSoup(page, parseOnlyThese=SoupStrainer('li'))
-    
+def tumblrss(html):
+    soup = BeautifulSoup(html, parseOnlyThese=SoupStrainer('li'))
+
     last_author = None
     items = []
 
@@ -84,5 +74,21 @@ if __name__ == "__main__":
         link = "http://www.tumblr.com/dashboard",
         lastBuildDate = datetime.datetime.now(),
         items=items)
+    return rss.to_xml(encoding="UTF-8")
 
-    rss.write_xml(open("tumblr.xml", "w"))
+if __name__ == "__main__":
+    auth = load_config()
+    if auth is None:
+        print "Invalid configuration file, see the documentation"
+        sys.exit(1)
+
+    if len(sys.argv) > 1:
+        html = open(sys.argv[1]).read()
+    else:
+        cj = cookielib.CookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+        opener.open("http://www.tumblr.com/login", urllib.urlencode(auth))
+        html = opener.open("http://www.tumblr.com/dashboard").read()
+
+    rss = tumblrss(html)
+    open("tumblr.xml", "w").write(rss)
