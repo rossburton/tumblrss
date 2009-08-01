@@ -15,21 +15,29 @@
 # this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
 # St, Fifth Floor, Boston, MA 02110-1301 USA
 
-import ConfigParser, datetime, os, sys, re, urllib, urllib2, cookielib
+import datetime, sys, re, urllib, urllib2, cookielib
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 from PyRSS2Gen import RSS2, RSSItem
 
-config = ConfigParser.ConfigParser()
-config.read(os.path.expanduser("~/.config/tumblrss"))
+def load_config():
+    import ConfigParser, os
 
-if not config.has_section("Auth"):
+    config = ConfigParser.ConfigParser()
+    # TODO: do xdg-dirs properly
+    config.read(os.path.expanduser("~/.config/tumblrss"))
+
+    if not config.has_section("Auth"):
+        return None
+
+    return {
+        "email": config.get("Auth", "email"),
+        "password": config.get("Auth", "password")
+        }
+
+auth = load_config()
+if auth is None:
     print "Invalid configuration file, see the documentation"
     sys.exit(1)
-
-auth = {
-    "email": config.get("Auth", "email"),
-    "password": config.get("Auth", "password")
-    }
 
 cj = cookielib.CookieJar()
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
