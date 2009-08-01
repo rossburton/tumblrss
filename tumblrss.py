@@ -40,6 +40,7 @@ def tumblrss(html):
     last_author = None
     items = []
 
+    # TODO: make skipping your an option
     for post in soup.findAll(attrs={"class": re.compile("not_mine")}):
         n = post.find("div", "post_info")
         if n:
