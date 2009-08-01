@@ -50,9 +50,13 @@ def tumblrss(html):
         else:
             author = last_author
         
+        # TODO: extract the source from quotes as title?
         n = post.find("div", "post_title")
         if n:
-            title = n.a.string
+            if n.a:
+                title = n.a.string.strip()
+            else:
+                title = n.string.strip()
             n.extract()
         else:
             title = ""
