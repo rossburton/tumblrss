@@ -68,13 +68,13 @@ def tumblrss(html):
                              guid=url,
                              description=str(post)))
 
-    rss = RSS2(
+    return RSS2(
         title = "Tumblr",
         description="My Tumblr contacts",
         link = "http://www.tumblr.com/dashboard",
         lastBuildDate = datetime.datetime.now(),
         items=items)
-    return rss.to_xml(encoding="UTF-8")
+
 
 if __name__ == "__main__":
     auth = load_config()
@@ -91,4 +91,4 @@ if __name__ == "__main__":
         html = opener.open("http://www.tumblr.com/dashboard").read()
 
     rss = tumblrss(html)
-    open("tumblr.xml", "w").write(rss)
+    rss.write_xml(open("tumblr.xml", "w"))
