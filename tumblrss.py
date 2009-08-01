@@ -34,56 +34,55 @@ def load_config():
         "password": config.get("Auth", "password")
         }
 
-auth = load_config()
-if auth is None:
-    print "Invalid configuration file, see the documentation"
-    sys.exit(1)
-
-cj = cookielib.CookieJar()
-opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-
-opener.open("http://www.tumblr.com/login", urllib.urlencode(auth))
-page = opener.open("http://www.tumblr.com/dashboard").read()
-soup = BeautifulSoup(page, parseOnlyThese=SoupStrainer('li'))
-
-last_author = None
-items = []
-
-for post in soup.findAll(attrs={"class": re.compile("not_mine")}):
-    n = post.find("div", "post_info")
-    if n:
-        author = n.a.string
-        last_author = author
-        n.extract()
-    else:
-        author = last_author
+if __name__ == "__main__":
+    auth = load_config()
+    if auth is None:
+        print "Invalid configuration file, see the documentation"
+        sys.exit(1)
     
+    cj = cookielib.CookieJar()
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+    
+    opener.open("http://www.tumblr.com/login", urllib.urlencode(auth))
+    page = opener.open("http://www.tumblr.com/dashboard").read()
+    soup = BeautifulSoup(page, parseOnlyThese=SoupStrainer('li'))
+    
+    last_author = None
+    items = []
 
-    n = post.find("div", "post_title")
-    if n:
-        title = n.a.string
-        n.extract()
-    else:
-        title = ""
+    for post in soup.findAll(attrs={"class": re.compile("not_mine")}):
+        n = post.find("div", "post_info")
+        if n:
+            author = n.a.string
+            last_author = author
+            n.extract()
+        else:
+            author = last_author
+        
+        n = post.find("div", "post_title")
+        if n:
+            title = n.a.string
+            n.extract()
+        else:
+            title = ""
 
-    url = post.find("a", attrs={"title": "Permalink"})["href"]
+        url = post.find("a", attrs={"title": "Permalink"})["href"]
+        
+        post.find("div", "post_controls").extract()
+        post.find("div", "so_ie_doesnt_treat_this_as_inline").extract()
+        post.find("div", id=re.compile("notes_outer_container_")).extract()
+        
+        items.append(RSSItem(title=title,
+                             author=author,
+                             link=url,
+                             guid=url,
+                             description=str(post)))
 
-    post.find("div", "post_controls").extract()
-    post.find("div", "so_ie_doesnt_treat_this_as_inline").extract()
-    post.find("div", id=re.compile("notes_outer_container_")).extract()
+    rss = RSS2(
+        title = "Tumblr",
+        description="My Tumblr contacts",
+        link = "http://www.tumblr.com/dashboard",
+        lastBuildDate = datetime.datetime.now(),
+        items=items)
 
-    items.append(RSSItem(title=title,
-                         author=author,
-                         link=url,
-                         guid=url,
-                         description=str(post)))
-
-
-
-rss = RSS2(
-    title = "Tumblr",
-    description="My Tumblr contacts",
-    link = "http://www.tumblr.com/dashboard",
-    lastBuildDate = datetime.datetime.now(),
-    items=items)
-rss.write_xml(open("tumblr.xml", "w"))
+    rss.write_xml(open("tumblr.xml", "w"))
