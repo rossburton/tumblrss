@@ -23,9 +23,11 @@ compare(rss, (
          ),
         ("conundrum",
          "http://conundrum.tumblr.com/post/153003804/after-an-evening-of-drinking-wild-turkey-and",
+         "7 High Tech Products And Their Cheap Ass Ingredients"
          ),
         ("joshual",
-         "http://joshual.tumblr.com/post/152893624/xml-is-like-violence-if-it-doesnt-solve-your"
+         "http://joshual.tumblr.com/post/152893624/xml-is-like-violence-if-it-doesnt-solve-your",
+         "nokogiri-1.3.2 Documentation"
          ),
         ("conundrum",
          "http://conundrum.tumblr.com/post/152196239/dottorcarlo-puscic-comicbooks-death-by-charles"
@@ -52,5 +54,7 @@ compare(rss, (
         ("conundrum",
          "http://conundrum.tumblr.com/post/150856620/dan-zambonini-london-tube-map-hat-tip-thomas"),
         ("joshual",
-         "http://joshual.tumblr.com/post/150772409/the-game-named-page-hunt-presents-users-with-a")
+         "http://joshual.tumblr.com/post/150772409/the-game-named-page-hunt-presents-users-with-a",
+         "Microsoft Bing Could Be Improved with Online Game"
+         )
         ))
