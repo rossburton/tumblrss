@@ -59,7 +59,11 @@ def tumblrss(html):
                 title = n.string.strip()
             n.extract()
         else:
-            title = ""
+            n = post.find("td", "quote_source")
+            if n:
+                title = n.find("a").string.strip()
+            else:
+                title = ""
 
         url = post.find("a", attrs={"title": "Permalink"})["href"]
         
