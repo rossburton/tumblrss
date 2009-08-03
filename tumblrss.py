@@ -105,17 +105,14 @@ if __name__ == "__main__":
         items = []
         
         # First page
-        print url
         (i, url) = tumblrss(opener.open(url).read())
         items.extend(i)
 
         # Second page
-        print url
         (i, url) = tumblrss(opener.open(url).read())
         items.extend(i)
 
         # Third page
-        print url
         (i, url) = tumblrss(opener.open(url).read())
         items.extend(i)
 
