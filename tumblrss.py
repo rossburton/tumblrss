@@ -93,17 +93,37 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         html = open(sys.argv[1]).read()
+        items = tumblrss(html)[0]
     else:
         cj = cookielib.CookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+        
+        # Login
         opener.open("http://www.tumblr.com/login", urllib.urlencode(auth))
-        html = opener.open("http://www.tumblr.com/dashboard").read()
+
+        url = "http://www.tumblr.com/dashboard"
+        items = []
+        
+        # First page
+        print url
+        (i, url) = tumblrss(opener.open(url).read())
+        items.extend(i)
+
+        # Second page
+        print url
+        (i, url) = tumblrss(opener.open(url).read())
+        items.extend(i)
+
+        # Third page
+        print url
+        (i, url) = tumblrss(opener.open(url).read())
+        items.extend(i)
 
     rss = RSS2(
         title = "Tumblr",
         description="My Tumblr contacts",
         link = "http://www.tumblr.com/dashboard",
         lastBuildDate = datetime.datetime.now(),
-        items=tumblrss(html)[0])
+        items=items)
     
     rss.write_xml(open("tumblr.xml", "w"), encoding="UTF-8")
