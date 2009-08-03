@@ -65,7 +65,7 @@ def tumblrss(html):
         else:
             n = post.find("td", "quote_source")
             if n:
-                title = n.find("a").string.strip()
+                title = "".join(n.findAll(text=True)).strip()
             else:
                 title = ""
 
