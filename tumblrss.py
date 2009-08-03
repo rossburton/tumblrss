@@ -36,10 +36,10 @@ def load_config():
 
 def tumblrss(html):
     """
-    Parse the HTML and return a list of RSSItem items.
+    Parse the HTML and return (list of RSSItem items, URL of next page).
     """
 
-    soup = BeautifulSoup(html, parseOnlyThese=SoupStrainer('li'))
+    soup = BeautifulSoup(html, parseOnlyThese=SoupStrainer(['li', 'a']))
 
     last_author = None
     items = []
@@ -80,7 +80,10 @@ def tumblrss(html):
                              link=url,
                              guid=url,
                              description=str(post)))
-    return items
+    
+    next_url = "http://tumblr.com" + soup.find("a", id="next_page_link")["href"]
+    
+    return (items, next_url)
 
 if __name__ == "__main__":
     auth = load_config()
@@ -101,6 +104,6 @@ if __name__ == "__main__":
         description="My Tumblr contacts",
         link = "http://www.tumblr.com/dashboard",
         lastBuildDate = datetime.datetime.now(),
-        items=tumblrss(html))
+        items=tumblrss(html)[0])
     
     rss.write_xml(open("tumblr.xml", "w"), encoding="UTF-8")

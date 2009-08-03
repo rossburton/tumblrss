@@ -14,7 +14,7 @@ def compare(items, expected):
             assert items[i].title == ""
 
 
-items = tumblrss(open("tests/test-1.html").read())
+items = tumblrss(open("tests/test-1.html").read())[0]
 assert len(items) == 5
 compare(items, (
         ("rulesformyunbornson",
@@ -37,7 +37,7 @@ compare(items, (
          )
         ))
 
-items = tumblrss(open("tests/test-2.html").read())
+items = tumblrss(open("tests/test-2.html").read())[0]
 assert len(items) == 7
 compare(items, (
         ("conundrum",
