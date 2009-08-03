@@ -2,21 +2,21 @@
 
 from tumblrss import tumblrss
 
-def compare(rss, expected):
-    assert len(rss.items) == len(expected)
-    for i in range(0, len(rss.items)):
-        assert rss.items[i].author == expected[i][0]
-        assert rss.items[i].link == expected[i][1]
-        assert rss.items[i].guid == expected[i][1]
+def compare(items, expected):
+    assert len(items) == len(expected)
+    for i in range(0, len(items)):
+        assert items[i].author == expected[i][0]
+        assert items[i].link == expected[i][1]
+        assert items[i].guid == expected[i][1]
         if len(expected[i]) == 3:
-            assert rss.items[i].title == expected[i][2]
+            assert items[i].title == expected[i][2]
         else:
-            assert rss.items[i].title == ""
+            assert items[i].title == ""
 
 
-rss = tumblrss(open("tests/test-1.html").read())
-assert len(rss.items) == 5
-compare(rss, (
+items = tumblrss(open("tests/test-1.html").read())
+assert len(items) == 5
+compare(items, (
         ("rulesformyunbornson",
          "http://rulesformyunbornson.tumblr.com/post/153115498/383-framing-a-poster-does-not-make-it-valuable",
          "383. Framing a poster does not make it valuable."
@@ -37,9 +37,9 @@ compare(rss, (
          )
         ))
 
-rss = tumblrss(open("tests/test-2.html").read())
-assert len(rss.items) == 7
-compare(rss, (
+items = tumblrss(open("tests/test-2.html").read())
+assert len(items) == 7
+compare(items, (
         ("conundrum",
          "http://conundrum.tumblr.com/post/151597536"),
         ("joshual",
